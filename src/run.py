@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 
 from utils.timers import ClockBasedTimer
-from utils import find_in_list, get_stream_frames_generator, load_zones_config
+from utils.general import load_zones_config, get_stream_frames_generator, find_in_list
 
 
 source_video_path = '/kaggle/input/traffic-video/4K Road traffic video for object detection and tracking - free download now - Karol Majek (720p h264) (online-video-cutter.com).mp4'
@@ -38,7 +38,7 @@ def main(
 
     fps_monitor = sv.FPSMonitor()
 
-    polygons = load_zones_config
+    polygons = load_zones_config(file_path='zones_config.json')
     
     zones = [
         sv.PolygonZone(
@@ -93,6 +93,6 @@ def main(
                     labels=labels,
                     custom_color_lookup=custom_color_lookup,
                 )
-                sink.write_frame(annotated_frame)
+            sink.write_frame(annotated_frame)
 
 main(weights='yolov8m.pt', device='cuda', confidence=0.5, iou=0.7, classes=[2, 5, 6, 7], source_video_path=source_video_path, target_video_path=target_video_path)
